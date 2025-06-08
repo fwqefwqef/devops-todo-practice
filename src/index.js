@@ -11,7 +11,7 @@ export default {
       const rawList = await env.TODOS.get("list");
       const list = rawList ? JSON.parse(rawList) : [];
 
-      list.push({ content });
+      list.push({ id: crypto.randomUUID(), content });
       await env.TODOS.put("list", JSON.stringify(list));
 
       return new Response(JSON.stringify(list), {
@@ -22,6 +22,27 @@ export default {
     if (url.pathname === "/list") {
       const rawList = await env.TODOS.get("list");
       const list = rawList ? JSON.parse(rawList) : [];
+
+      return new Response(JSON.stringify(list), {
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    if (url.pathname === "/migrate") {
+      const rawList = await env.TODOS.get("list");
+      const list = rawList ? JSON.parse(rawList) : [];
+
+      let changed = false;
+      for (const item of list) {
+        if (!("id" in item)) {
+          item.id = crypto.randomUUID();
+          changed = true;
+        }
+      }
+
+      if (changed) {
+        await env.TODOS.put("list", JSON.stringify(list));
+      }
 
       return new Response(JSON.stringify(list), {
         headers: { "Content-Type": "application/json" },
