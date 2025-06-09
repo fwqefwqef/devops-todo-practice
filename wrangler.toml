@@ -1,6 +1,6 @@
 name = "todo-preview-prod"
 main = "src/index.js"
-account_id = "9bccf61ade33a74db17940fb28b60248"
+account_id = "b49212858a35492d031028fd98a0bb7d"
 compatibility_date = "2025-06-08"
 
 [[kv_namespaces]]
